@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">PalindromoApp</string>
+    <string name="home_title">Digite uma palavra e descubra se é um palíndromo</string>
+    <string name="home_hint">Digite aqui</string>
+    <string name="success_answer">Parabéns, a palavra %1s é um palíndromo!</string>
+    <string name="failure_answer">Uma pena, a palavra %1s não é um palíndromo.</string>
+</resources>
