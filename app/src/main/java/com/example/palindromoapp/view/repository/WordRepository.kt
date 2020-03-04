@@ -22,4 +22,8 @@ object WordRepository {
     fun insert(vararg words: Word) {
         database.wordDao().insertAll(*words)
     }
+
+    fun deleteAll() {
+        database.wordDao().deleteAll()
+    }
 }

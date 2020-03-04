@@ -1,7 +1,6 @@
 package com.example.palindromoapp.view.repository
 
 import androidx.room.Dao
-import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import com.example.palindromoapp.view.model.DatabaseTables
@@ -17,7 +16,4 @@ interface WordDao {
 
     @Query("""DELETE FROM ${DatabaseTables.WordTable.NAME}""")
     fun deleteAll()
-
-    @Delete
-    fun delete(vararg words: Word)
 }

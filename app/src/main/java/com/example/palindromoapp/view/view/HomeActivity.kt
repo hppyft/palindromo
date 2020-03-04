@@ -31,11 +31,13 @@ class HomeActivity : AppCompatActivity() {
 
         setupOnTextChanged()
 
+        mBinding.clearHistoricoListener = mViewModel
+
         val adapter = WordAdapter()
         mBinding.wordsList.adapter = adapter
 
         mViewModel.getWordList().observe(this, Observer<List<Word>> {
-            if (it.isNotEmpty()) mBinding.wordListGroup.visibility = View.VISIBLE
+            if (it.isNotEmpty()) mBinding.wordListGroup.visibility = View.VISIBLE else mBinding.wordListGroup.visibility = View.GONE
             adapter.setList(it)
         })
 

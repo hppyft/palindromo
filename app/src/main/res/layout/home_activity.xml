@@ -4,7 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".view.view.HomeActivity">
 
-    <data></data>
+    <data>
+
+        <variable
+            name="clearHistoricoListener"
+            type="com.example.palindromoapp.view.util.ClearHistoricoListener" />
+    </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -84,7 +89,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:visibility="gone"
-            app:constraint_referenced_ids="divider,home_list_label" />
+            app:constraint_referenced_ids="divider,home_list_label,words_list,home_clear_button"
+            tools:visibility="visible" />
 
         <View
             android:id="@+id/divider"
@@ -103,8 +109,19 @@
             android:textColor="@color/white"
             android:textSize="32sp"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/home_clear_button"
             app:layout_constraintTop_toBottomOf="@id/divider" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/home_clear_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="@{() -> clearHistoricoListener.onClearHistoricoClicked()}"
+            android:text="@string/clear_list_label"
+            app:layout_constraintBottom_toBottomOf="@id/home_list_label"
+            app:layout_constraintLeft_toRightOf="@id/home_list_label"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="@id/home_list_label" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/words_list"
@@ -118,7 +135,8 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@id/home_list_label"
-            tools:itemCount="40"
+            app:layout_constraintVertical_bias="0"
+            tools:itemCount="1"
             tools:listitem="@layout/word_item" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 

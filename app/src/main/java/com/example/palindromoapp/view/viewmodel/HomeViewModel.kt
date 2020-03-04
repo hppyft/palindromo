@@ -6,13 +6,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.palindromoapp.view.model.Word
 import com.example.palindromoapp.view.repository.WordRepository
+import com.example.palindromoapp.view.util.ClearHistoricoListener
 import com.example.palindromoapp.view.util.PalindromoUtil
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.*
 
-class HomeViewModel : ViewModel() {
+class HomeViewModel : ViewModel(), ClearHistoricoListener {
     companion object {
         const val TIMER_DELAY = 1000L
     }
@@ -37,6 +38,15 @@ class HomeViewModel : ViewModel() {
 
     fun getWordList(): LiveData<List<Word>> {
         return mWordList
+    }
+
+    override fun onClearHistoricoClicked() {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                WordRepository.deleteAll()
+                updateWordList()
+            }
+        }
     }
 
     fun onPalindromoTextChanged(text: String) {
