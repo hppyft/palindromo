@@ -79,6 +79,13 @@
             app:barrierDirection="bottom"
             app:constraint_referenced_ids="home_progressbar,home_resposta" />
 
+        <androidx.constraintlayout.widget.Group
+            android:id="@+id/word_list_group"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            app:constraint_referenced_ids="divider,home_list_label" />
+
         <View
             android:id="@+id/divider"
             android:layout_width="match_parent"

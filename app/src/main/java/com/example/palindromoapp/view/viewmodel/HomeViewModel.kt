@@ -23,20 +23,20 @@ class HomeViewModel : ViewModel() {
     val mTimer by lazy { Timer() }
     var mTimerTask: TimerTask? = null
 
-    fun getIsTextPalindromo(): LiveData<Boolean?> {
-        return mIsTextPalindromo
-    }
-
-    fun getWordList(): LiveData<List<Word>> {
-        return mWordList
-    }
-
     init {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 updateWordList()
             }
         }
+    }
+
+    fun getIsTextPalindromo(): LiveData<Boolean?> {
+        return mIsTextPalindromo
+    }
+
+    fun getWordList(): LiveData<List<Word>> {
+        return mWordList
     }
 
     fun onPalindromoTextChanged(text: String) {

@@ -12,6 +12,7 @@ import com.example.palindromoapp.databinding.HomeActivityBinding
 import com.example.palindromoapp.view.adapter.WordAdapter
 import com.example.palindromoapp.view.model.Word
 import com.example.palindromoapp.view.util.AfterTextChangedListener
+import com.example.palindromoapp.view.util.StringUtil
 import com.example.palindromoapp.view.viewmodel.HomeViewModel
 
 class HomeActivity : AppCompatActivity() {
@@ -34,6 +35,7 @@ class HomeActivity : AppCompatActivity() {
         mBinding.wordsList.adapter = adapter
 
         mViewModel.getWordList().observe(this, Observer<List<Word>> {
+            if (it.isNotEmpty()) mBinding.wordListGroup.visibility = View.VISIBLE
             adapter.setList(it)
         })
 
@@ -48,7 +50,7 @@ class HomeActivity : AppCompatActivity() {
             override fun afterTextChanged(s: Editable?) {
                 mBinding.homeResposta.visibility = View.GONE
                 mBinding.homeProgressbar.visibility = View.VISIBLE
-                mViewModel.onPalindromoTextChanged(s.toString())
+                mViewModel.onPalindromoTextChanged(StringUtil.clearStringForPalindromo(s.toString()))
             }
         })
     }
@@ -56,11 +58,13 @@ class HomeActivity : AppCompatActivity() {
     private fun setAnswer(it: Boolean?) {
         mBinding.homeProgressbar.visibility = View.GONE
         if (it != null) {
+            val text =
+                StringUtil.clearStringForPalindromo(mBinding.homePalindromoEt.text.toString())
             when (it) {
                 true -> mBinding.homeResposta.text =
-                    getString(R.string.success_answer, mBinding.homePalindromoEt.text.toString())
+                    getString(R.string.success_answer, text)
                 false -> mBinding.homeResposta.text =
-                    getString(R.string.failure_answer, mBinding.homePalindromoEt.text.toString())
+                    getString(R.string.failure_answer, text)
             }
             mBinding.homeResposta.visibility = View.VISIBLE
         }
