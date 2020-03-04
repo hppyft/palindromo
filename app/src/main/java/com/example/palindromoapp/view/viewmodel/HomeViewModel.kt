@@ -3,7 +3,13 @@ package com.example.palindromoapp.view.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.palindromoapp.view.PalindromoUtil
+import androidx.lifecycle.viewModelScope
+import com.example.palindromoapp.view.model.Word
+import com.example.palindromoapp.view.repository.WordRepository
+import com.example.palindromoapp.view.util.PalindromoUtil
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.util.*
 
 class HomeViewModel : ViewModel() {
@@ -12,12 +18,25 @@ class HomeViewModel : ViewModel() {
     }
 
     val mIsTextPalindromo: MutableLiveData<Boolean?> by lazy { MutableLiveData<Boolean?>() }
+    val mWordList: MutableLiveData<List<Word>> by lazy { MutableLiveData<List<Word>>() }
+
     val mTimer by lazy { Timer() }
     var mTimerTask: TimerTask? = null
 
-
     fun getIsTextPalindromo(): LiveData<Boolean?> {
         return mIsTextPalindromo
+    }
+
+    fun getWordList(): LiveData<List<Word>> {
+        return mWordList
+    }
+
+    init {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                updateWordList()
+            }
+        }
     }
 
     fun onPalindromoTextChanged(text: String) {
@@ -26,9 +45,32 @@ class HomeViewModel : ViewModel() {
         mTimerTask =
             object : TimerTask() {
                 override fun run() {
-                    mIsTextPalindromo.postValue(PalindromoUtil.isTextPalindromo(text))
+                    onPalindromoTextStoppedChanging(text)
                 }
             }
         mTimer.schedule(mTimerTask, TIMER_DELAY)
+    }
+
+    private fun onPalindromoTextStoppedChanging(text: String) {
+        val isPalindromo = PalindromoUtil.isTextPalindromo(text)
+        if (isPalindromo != null) {
+            val word = Word(text = text, isPalindromo = isPalindromo)
+            insertWord(word)
+            updateWordList()
+        }
+        mIsTextPalindromo.postValue(isPalindromo)
+    }
+
+    private fun insertWord(word: Word) {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                WordRepository.insert(word)
+                updateWordList()
+            }
+        }
+    }
+
+    private fun updateWordList() {
+        mWordList.postValue(WordRepository.getAll())
     }
 }

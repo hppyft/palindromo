@@ -1,4 +1,4 @@
-package com.example.palindromoapp.view
+package com.example.palindromoapp.view.util
 
 object PalindromoUtil {
 

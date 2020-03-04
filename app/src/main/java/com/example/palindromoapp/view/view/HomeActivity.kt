@@ -1,4 +1,4 @@
-package com.example.palindromoapp.view
+package com.example.palindromoapp.view.view
 
 import android.os.Bundle
 import android.text.Editable
@@ -9,6 +9,9 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.palindromoapp.R
 import com.example.palindromoapp.databinding.HomeActivityBinding
+import com.example.palindromoapp.view.adapter.WordAdapter
+import com.example.palindromoapp.view.model.Word
+import com.example.palindromoapp.view.util.AfterTextChangedListener
 import com.example.palindromoapp.view.viewmodel.HomeViewModel
 
 class HomeActivity : AppCompatActivity() {
@@ -27,13 +30,21 @@ class HomeActivity : AppCompatActivity() {
 
         setupOnTextChanged()
 
+        val adapter = WordAdapter()
+        mBinding.wordsList.adapter = adapter
+
+        mViewModel.getWordList().observe(this, Observer<List<Word>> {
+            adapter.setList(it)
+        })
+
         mViewModel.getIsTextPalindromo().observe(this, Observer {
             setAnswer(it)
         })
     }
 
     private fun setupOnTextChanged() {
-        mBinding.homePalindromoEt.addTextChangedListener(object : AfterTextChangedListener {
+        mBinding.homePalindromoEt.addTextChangedListener(object :
+            AfterTextChangedListener {
             override fun afterTextChanged(s: Editable?) {
                 mBinding.homeResposta.visibility = View.GONE
                 mBinding.homeProgressbar.visibility = View.VISIBLE
