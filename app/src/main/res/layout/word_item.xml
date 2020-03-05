@@ -11,37 +11,63 @@
     </data>
 
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/black"
         android:orientation="horizontal"
         android:padding="16dp">
 
-        <androidx.appcompat.widget.AppCompatTextView
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/item_guideline_one"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.45" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/item_guideline_two"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.55" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/item_word"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
             android:text="@{word.text}"
             android:textColor="@color/white"
-            android:textSize="24sp"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="@id/item_guideline_one"
+            app:layout_constraintTop_toTopOf="parent"
             tools:text="Asa" />
 
         <View
+            android:id="@+id/item_divider"
             android:layout_width="2dp"
             android:layout_height="2dp"
-            android:layout_gravity="center_vertical"
-            android:layout_marginStart="16dp"
-            android:background="@color/white" />
+            android:background="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toRightOf="@id/item_guideline_one"
+            app:layout_constraintRight_toLeftOf="@id/item_guideline_two"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:layout_width="wrap_content"
+            android:id="@+id/item_answer"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginStart="16dp"
+            android:padding="8dp"
             android:textColor="@color/white"
-            android:textSize="24sp"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toRightOf="@id/item_guideline_two"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             app:palindromoText="@{word.palindromo}"
-            tools:text="SIM" />
-    </LinearLayout>
+            tools:text="É PALÍNDROMO" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

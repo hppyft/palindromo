@@ -5,8 +5,8 @@
     <string name="success_answer">Parabéns, a palavra %1s é um palíndromo!</string>
     <string name="failure_answer">Uma pena, a palavra %1s não é um palíndromo.</string>
 
-    <string name="success_short_answer">SIM</string>
-    <string name="failure_short_answer">NÃO</string>
+    <string name="success_short_answer">É PALÍNDROMO</string>
+    <string name="failure_short_answer">NÃO É</string>
     <string name="words_list_label">Histórico</string>
     <string name="clear_list_label">Limpar histórico</string>
 </resources>
