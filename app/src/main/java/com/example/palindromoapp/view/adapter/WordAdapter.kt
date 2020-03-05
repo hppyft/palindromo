@@ -23,9 +23,14 @@ class WordAdapter(var mList: List<Word> = listOf()) :
         holder.mBinding.word = item
     }
 
-    fun setList(words: List<Word>) {
+    fun updateList(words: List<Word>) {
+        val oldList = mList
         mList = words
-        notifyDataSetChanged()
+        if (mList.size > oldList.size && oldList.isNotEmpty()) {
+            notifyItemInserted(mList.size - 1)
+        } else {
+            notifyDataSetChanged()
+        }
     }
 
     class WordViewHolder(val mBinding: WordItemBinding) : RecyclerView.ViewHolder(mBinding.root)

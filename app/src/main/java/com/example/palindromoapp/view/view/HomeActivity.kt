@@ -38,7 +38,7 @@ class HomeActivity : AppCompatActivity() {
 
         mViewModel.getWordList().observe(this, Observer<List<Word>> {
             if (it.isNotEmpty()) mBinding.wordListGroup.visibility = View.VISIBLE else mBinding.wordListGroup.visibility = View.GONE
-            adapter.setList(it)
+            adapter.updateList(it)
         })
 
         mViewModel.getIsTextPalindromo().observe(this, Observer {

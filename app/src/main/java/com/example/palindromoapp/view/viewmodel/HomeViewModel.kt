@@ -26,9 +26,7 @@ class HomeViewModel : ViewModel(), ClearHistoricoListener {
 
     init {
         viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                updateWordList()
-            }
+            mWordList.postValue(getAllWords())
         }
     }
 
@@ -42,11 +40,12 @@ class HomeViewModel : ViewModel(), ClearHistoricoListener {
 
     override fun onClearHistoricoClicked() {
         viewModelScope.launch {
-            withContext(Dispatchers.IO) {
+            withContext(Dispatchers.Default) {
                 WordRepository.deleteAll()
-                updateWordList()
             }
+            mWordList.postValue(getAllWords())
         }
+
     }
 
     fun onPalindromoTextChanged(text: String) {
@@ -65,22 +64,23 @@ class HomeViewModel : ViewModel(), ClearHistoricoListener {
         val isPalindromo = PalindromoUtil.isTextPalindromo(text)
         if (isPalindromo != null) {
             val word = Word(text = text, isPalindromo = isPalindromo)
-            insertWord(word)
-            updateWordList()
+            insertWordAndUpdate(word)
         }
         mIsTextPalindromo.postValue(isPalindromo)
     }
 
-    private fun insertWord(word: Word) {
+    private fun insertWordAndUpdate(word: Word) {
         viewModelScope.launch {
-            withContext(Dispatchers.IO) {
+            withContext(Dispatchers.Default) {
                 WordRepository.insert(word)
-                updateWordList()
             }
+            mWordList.postValue(getAllWords())
         }
     }
 
-    private fun updateWordList() {
-        mWordList.postValue(WordRepository.getAll())
+    private suspend fun getAllWords(): List<Word> {
+        return withContext(Dispatchers.Default) {
+            WordRepository.getAll()
+        }
     }
 }
