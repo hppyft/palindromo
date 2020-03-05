@@ -34,12 +34,11 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/item_word"
+            style="@style/Default"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:padding="8dp"
             android:text="@{word.text}"
-            android:textColor="@color/white"
-            android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="@id/item_guideline_one"
@@ -58,11 +57,10 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/item_answer"
+            style="@style/Default"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:padding="8dp"
-            android:textColor="@color/white"
-            android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toRightOf="@id/item_guideline_two"
             app:layout_constraintRight_toRightOf="parent"
