@@ -8,6 +8,8 @@ import com.example.palindromoapp.view.model.Word
 import com.example.palindromoapp.view.repository.WordRepository
 import com.example.palindromoapp.view.util.ClearHistoricoListener
 import com.example.palindromoapp.view.util.PalindromoUtil
+import com.example.palindromoapp.view.util.WordFactory
+import com.example.palindromoapp.view.util.WordValidator
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -40,12 +42,16 @@ class HomeViewModel : ViewModel(), ClearHistoricoListener {
 
     override fun onClearHistoricoClicked() {
         viewModelScope.launch {
-            withContext(Dispatchers.Default) {
-                WordRepository.deleteAll()
-            }
+            deleteAll()
             mWordList.postValue(getAllWords())
         }
 
+    }
+
+    private suspend fun deleteAll() {
+        withContext(Dispatchers.Default) {
+            WordRepository.deleteAll()
+        }
     }
 
     fun onPalindromoTextChanged(text: String) {
@@ -62,17 +68,21 @@ class HomeViewModel : ViewModel(), ClearHistoricoListener {
 
     private fun onPalindromoTextStoppedChanging(text: String) {
         val isPalindromo = PalindromoUtil.isTextPalindromo(text)
-        val word = Word(text = text, isPalindromo = isPalindromo)
-        if (word.text.isNotEmpty()) insertWordAndUpdate(word)
+        val word = WordFactory.createWord(text, isPalindromo)
+        if (WordValidator.isValid(word)) insertWordAndUpdate(word)
         mWord.postValue(word)
     }
 
     private fun insertWordAndUpdate(word: Word) {
         viewModelScope.launch {
-            withContext(Dispatchers.Default) {
-                WordRepository.insert(word)
-            }
+            inserWord(word)
             mWordList.postValue(getAllWords())
+        }
+    }
+
+    private suspend fun inserWord(word: Word) {
+        withContext(Dispatchers.Default) {
+            WordRepository.insert(word)
         }
     }
 

@@ -6,44 +6,40 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import com.example.palindromoapp.R
 import com.example.palindromoapp.databinding.HomeActivityBinding
 import com.example.palindromoapp.view.adapter.WordAdapter
 import com.example.palindromoapp.view.model.Word
 import com.example.palindromoapp.view.util.AfterTextChangedListener
 import com.example.palindromoapp.view.util.StringUtil
+import com.example.palindromoapp.view.util.ViewModelFactory
 import com.example.palindromoapp.view.viewmodel.HomeViewModel
 
 class HomeActivity : AppCompatActivity() {
 
     lateinit var mBinding: HomeActivityBinding
-    val mViewModel: HomeViewModel by lazy { ViewModelProvider(this).get(HomeViewModel::class.java) }
+    val mViewModel: HomeViewModel by lazy { setupViewModel() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.home_activity)
+        setupBinding()
+        setupOnTextChanged()
+        setupAdapter()
+        subscribeToViewModel()
+    }
 
+    private fun setupViewModel(): HomeViewModel {
+        return ViewModelFactory.getViewModel(this) as HomeViewModel
+    }
+
+    private fun setupBinding() {
         mBinding = DataBindingUtil.setContentView(
             this,
             R.layout.home_activity
         )
 
         mBinding.clearHistoricoListener = mViewModel
-
-        setupOnTextChanged()
-
-        val adapter = WordAdapter()
-        mBinding.wordsList.adapter = adapter
-
-        mViewModel.getWordList().observe(this, Observer<List<Word>> {
-            changeListVisibility(it)
-            adapter.updateList(it)
-        })
-
-        mViewModel.getWord().observe(this, Observer {
-            setAnswer(it)
-        })
     }
 
     private fun setupOnTextChanged() {
@@ -54,6 +50,21 @@ class HomeActivity : AppCompatActivity() {
                 mBinding.homeProgressbar.visibility = View.VISIBLE
                 mViewModel.onPalindromoTextChanged(StringUtil.clearStringForPalindromo(s.toString()))
             }
+        })
+    }
+
+    private fun setupAdapter() {
+        mBinding.wordsList.adapter = WordAdapter()
+    }
+
+    private fun subscribeToViewModel() {
+        mViewModel.getWordList().observe(this, Observer<List<Word>> {
+            changeListVisibility(it)
+            (mBinding.wordsList.adapter as WordAdapter).updateList(it)
+        })
+
+        mViewModel.getWord().observe(this, Observer {
+            setAnswer(it)
         })
     }
 

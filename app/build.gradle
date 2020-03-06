@@ -31,6 +31,28 @@ android {
             includeAndroidResources = true
         }
     }
+    packagingOptions {
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/license.txt'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'META-INF/notice.txt'
+        exclude 'META-INF/ASL2.0'
+        exclude("META-INF/*.kotlin_module")
+    }
+    flavorDimensions "testing"
+    productFlavors {
+        product {
+            // nothing
+        }
+        // Temp fix for issue https://github.com/mockk/mockk/issues/281
+        uiTest {
+            dimension "testing"
+            minSdkVersion 26
+        }
+    }
 }
 
 dependencies {
@@ -66,4 +88,25 @@ dependencies {
     //Coroutines
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.3"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0"
+
+    // Required for instrumented tests
+    androidTestImplementation 'junit:junit:4.12'
+    androidTestImplementation 'com.android.support:support-annotations:28.0.0'
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
+    androidTestImplementation 'com.android.support.test:rules:1.0.2'
+
+    //Espresso
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+
+    // Robolectric
+    testImplementation 'org.robolectric:robolectric:4.3'
+    androidTestImplementation 'org.robolectric:robolectric:4.3'
+
+    //Mockito for Android tests'
+    androidTestImplementation "org.mockito:mockito-android:2.19.1"
+
+    //Mockk
+    androidTestImplementation "io.mockk:mockk:1.9.3"
+
 }
