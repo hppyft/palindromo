@@ -18,7 +18,7 @@ class HomeViewModel : ViewModel(), ClearHistoricoListener {
         const val TIMER_DELAY = 1000L
     }
 
-    val mIsTextPalindromo: MutableLiveData<Boolean?> by lazy { MutableLiveData<Boolean?>() }
+    val mWord: MutableLiveData<Word> by lazy { MutableLiveData<Word>() }
     val mWordList: MutableLiveData<List<Word>> by lazy { MutableLiveData<List<Word>>() }
 
     val mTimer by lazy { Timer() }
@@ -30,8 +30,8 @@ class HomeViewModel : ViewModel(), ClearHistoricoListener {
         }
     }
 
-    fun getIsTextPalindromo(): LiveData<Boolean?> {
-        return mIsTextPalindromo
+    fun getWord(): LiveData<Word> {
+        return mWord
     }
 
     fun getWordList(): LiveData<List<Word>> {
@@ -62,11 +62,9 @@ class HomeViewModel : ViewModel(), ClearHistoricoListener {
 
     private fun onPalindromoTextStoppedChanging(text: String) {
         val isPalindromo = PalindromoUtil.isTextPalindromo(text)
-        if (isPalindromo != null) {
-            val word = Word(text = text, isPalindromo = isPalindromo)
-            insertWordAndUpdate(word)
-        }
-        mIsTextPalindromo.postValue(isPalindromo)
+        val word = Word(text = text, isPalindromo = isPalindromo)
+        if (word.text.isNotEmpty()) insertWordAndUpdate(word)
+        mWord.postValue(word)
     }
 
     private fun insertWordAndUpdate(word: Word) {

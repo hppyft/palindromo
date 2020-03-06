@@ -29,19 +29,19 @@ class HomeActivity : AppCompatActivity() {
             R.layout.home_activity
         )
 
-        setupOnTextChanged()
-
         mBinding.clearHistoricoListener = mViewModel
+
+        setupOnTextChanged()
 
         val adapter = WordAdapter()
         mBinding.wordsList.adapter = adapter
 
         mViewModel.getWordList().observe(this, Observer<List<Word>> {
-            if (it.isNotEmpty()) mBinding.wordListGroup.visibility = View.VISIBLE else mBinding.wordListGroup.visibility = View.GONE
+            changeListVisibility(it)
             adapter.updateList(it)
         })
 
-        mViewModel.getIsTextPalindromo().observe(this, Observer {
+        mViewModel.getWord().observe(this, Observer {
             setAnswer(it)
         })
     }
@@ -57,16 +57,19 @@ class HomeActivity : AppCompatActivity() {
         })
     }
 
-    private fun setAnswer(it: Boolean?) {
+    private fun changeListVisibility(list: List<Word>) {
+        if (list.isNotEmpty()) mBinding.wordListGroup.visibility =
+            View.VISIBLE else mBinding.wordListGroup.visibility = View.GONE
+    }
+
+    private fun setAnswer(it: Word) {
         mBinding.homeProgressbar.visibility = View.GONE
-        if (it != null) {
-            val text =
-                StringUtil.clearStringForPalindromo(mBinding.homePalindromoEt.text.toString())
-            when (it) {
+        if (it.text.isNotEmpty()) {
+            when (it.isPalindromo) {
                 true -> mBinding.homeResposta.text =
-                    getString(R.string.success_answer, text)
+                    getString(R.string.success_answer, it.text)
                 false -> mBinding.homeResposta.text =
-                    getString(R.string.failure_answer, text)
+                    getString(R.string.failure_answer, it.text)
             }
             mBinding.homeResposta.visibility = View.VISIBLE
         }
